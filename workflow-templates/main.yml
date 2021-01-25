@@ -1,0 +1,60 @@
+name: "main"
+
+on: push
+
+jobs:
+  main_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: "Install dependencies"
+        run: yarn install --frozen-lockfile --ignore-scripts
+
+      - name: "Lint"
+        run: yarn lint
+
+      - name: "Test"
+        run: yarn test
+
+      # Only required if you are including the `./dist` directory inside git
+      - name: "Confirm that the build was run locally and files committed"
+        run: |
+          yarn build
+          sh ./scripts/gitstatus.sh
+
+  # The release step is kept distinct from all other steps as it may have access to our NPM registry publish tokens
+  main_release:
+    if: github.ref == 'refs/heads/main'
+    needs: main_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: "Install dependencies"
+        run: yarn install --frozen-lockfile --ignore-scripts
+
+      # Only required if you are *not* including the `./dist` directory inside git
+      # - name: "Build"
+      #   run: yarn build
+
+      - name: "Release"
+        uses: wearehanno/action-semantic-release@main
+        if: ${{ success() }}
+        with:
+          flavour: release-package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for publishing a GitHub *Release*
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for publishing a *Package* on GitHub or NPM

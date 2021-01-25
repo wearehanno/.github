@@ -1,0 +1,7 @@
+{
+  "name": "Semantic Pull Request workflow",
+  "description": "Template for Semantic Pull Requests",
+  "iconName": "icon-pr",
+  "categories": ["JavaScript"],
+  "filePatterns": ["package.json$"]
+}

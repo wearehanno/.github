@@ -1,0 +1,7 @@
+{
+  "name": "Main test and release workflow",
+  "description": "Template for testing and releasing packages",
+  "iconName": "icon-main",
+  "categories": ["JavaScript"],
+  "filePatterns": ["package.json$"]
+}
