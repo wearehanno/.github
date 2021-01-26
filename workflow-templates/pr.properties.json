@@ -1,6 +1,6 @@
 {
-  "name": "Semantic Pull Request workflow",
-  "description": "Template for Semantic Pull Requests",
+  "name": "Pull Request linter",
+  "description": "A workflow to ensure that PR titles match the conventional commit specification",
   "iconName": "icon-pr",
   "categories": ["JavaScript"],
   "filePatterns": ["package.json$"]
